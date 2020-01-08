@@ -78,8 +78,13 @@
     }
 
  function search(){
-      alert("aaa");
+      alert("검색을 시작합니다.");
       var s_input;
+      let link;
+      let thumbnail;
+      let title;
+      let date;
+      let content;
 
       s_input = $('#search-box').val();
 
@@ -88,12 +93,40 @@
           url: "save",
           data: {text:s_input},
           success: function(response){
-              alert("ok!!");
-            }
-          })
+              if(response['result'] == 'success'){
+                let articles = response['articles'];
+             for (let i = 0; i < articles.length; i++) {
+               make_card(articles[i]['link'],articles[i]['thumbnail'],articles[i]['nvPost_title'],articles[i]['date'],articles[i]['content'])}} 
+               else {
+                alert('검색실패');
+               }//else
+            }//success
+          })//ajax
 
-    }
+    }//search
+ 
 
+  function make_card(link ,thumbnail, title, date, content) {
+    console.log(title);
+    let temp_html = 
+    '<div class="col-lg-4 col-md-6 mb-4">\
+      <div class="card h-100">\
+        <a href="'+link+'"><img class="card-img-top" src="'+thumbnail+'" alt=""></a>\
+              <div class="card-body">\
+                <h4 class="card-title">\
+                  <a class="mytext" href="">'+title+'</a>\
+                </h4>\
+                <h5>'+date+'</h5>\
+                <p class="card-text">'+content+'</p>\
+              </div>\
+              <div class="card-footer">\
+                <a href="#" class="star_button_empty far fa-star fa-2x"></a>\
+                <a href="#" class="star_button_filled fas fa-star fa-2x"></a>\
+              </div>\
+            </div>\
+          </div>';
+          $('#home').append(temp_html);
+  }
 
   </script>
 </head>
@@ -127,27 +160,10 @@
       <div class="col-lg-9">
        
         <!-- home div -->
-        <div id="home">
-        <div class="row">
+        <!-- <div id="home"> -->
+        <div class="row" id="home">
 
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100">
-              <a href="https://blog.naver.com/key0034?Redirect=Log&logNo=221722443396"><img class="card-img-top" src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAxOTExMjlfOSAg%2FMDAxNTc1MDI3NzQ0MDAy.DQubpO08Sp9abiZiy4GwJ47keSJDfu3MO7h4O0Q-Mq8g.bF_GZmZLBjuLAMjqQ1PIVdgCgZCxuRkaXVgar6N7XGUg.JPEG.key0034%2F3.JPG%233406x3406&type=m80_80" alt=""></a>
-              <div class="card-body">
-                <h4 class="card-title">
-                  <a class="mytext" href="">*Emily's Food live...</a>
-                </h4>
-                <h5>2019.11.30. </h5>
-                <p class="card-text">크리스마스 케이크 만들기 / 딸기케이크 만들기 / 딸기생크림케...</p>
-              </div>
-
-              <div class="card-footer">
-                <a href="#" class="star_button_empty far fa-star fa-2x"></a>
-                <a href="#" class="star_button_empty far fa-star fa-2x"></a>
-                <a href="#" class="star_button_filled fas fa-star fa-2x"></a>
-              </div>
-            </div>
-          </div>
+          
 
           <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
@@ -166,7 +182,8 @@
           </div>
 
         </div><!-- row -->
-        </div><!-- 기본페이지 home div-->
+        <!-- </div> -->
+        <!-- 기본페이지 home div-->
 
         <!--만들고싶은 페이지 wanna -->
         <div id="wanna">

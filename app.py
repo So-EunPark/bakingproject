@@ -12,11 +12,12 @@ app = Flask(__name__)
 client = MongoClient('localhost', 27017)  # mongoDB는 27017 포트로 돌아갑니다.
 db = client.baking  # 'dbsparta'라는 이름의 db를 만듭니다.
 
-
+#도메인
 @app.route('/')
 def index():
     return render_template('index.html')
 
+#크롤링
 @app.route('/save', methods=['POST'])
 def home():
     text = request.form['text']
@@ -30,7 +31,7 @@ def home():
     soup = BeautifulSoup(data.text, 'html.parser')
     # select를 이용해서, dismissable들을 불러오기
     nvbakingPost = soup.select('#elThumbnailResultArea > li.sh_blog_top')
-
+    nvpost_list = []
     # 네이버 검색창 블로그 검색결과
     for nvPost in nvbakingPost:
         nvPost_thumbnail_tag = nvPost.select_one('img')
@@ -47,11 +48,12 @@ def home():
             'nvPost_url': nvPost_url,
             'nvPost_date': nvPost_date,
             'nvPost_poster': nvPost_poster
-
         }
+        nvpost_list.append(doc)
+
         # db.nvBakingPost.insert_one(doc)
 
-    return jsonify({'result': 'success'})
+    return jsonify({'result': 'success', 'articles':nvpost_list})
 
 if __name__ == '__main__':
    app.run('0.0.0.0',port=5000,debug=True)
